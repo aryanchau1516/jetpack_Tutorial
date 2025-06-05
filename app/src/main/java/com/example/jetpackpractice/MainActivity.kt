@@ -1,50 +1,35 @@
 package com.example.jetpackpractice
 
-import ButtonWithInput
-import SimpleTextInput
+import com.example.jetpackpractice.ui.theme.JetpackPracticeTheme
+
+
+import android.content.ActivityNotFoundException
+import android.content.Context
+import android.content.Intent
+import android.content.pm.PackageManager
 import android.os.Bundle
+import android.widget.Toast
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
-import androidx.activity.enableEdgeToEdge
-import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.foundation.layout.padding
-import androidx.compose.material3.Scaffold
-import androidx.compose.material3.Text
+import androidx.compose.foundation.layout.*
+import androidx.compose.material3.*
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.tooling.preview.Preview
-import com.example.jetpackpractice.practice.EachRecy
-import com.example.jetpackpractice.practice.ListAndItems
-import com.example.jetpackpractice.practice.Login_Ui1
-import com.example.jetpackpractice.practice.MoviesAndTVShowsScreen
-import com.example.jetpackpractice.practice.MultiChoiceInput
-import com.example.jetpackpractice.practice.MyApp
-import com.example.jetpackpractice.practice.Recycle
-import com.example.jetpackpractice.practice.SidebarExample
-import com.example.jetpackpractice.practice.UserInput
+import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.unit.dp
+import com.example.jetpackpractice.screens.LazyColumnss
 
-import com.example.jetpackpractice.ui.theme.JetpackPracticeTheme
-import com.example.jetpackpractice.utils.User
-import com.example.jetpackpractice.utils.dummyData
 
 class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        enableEdgeToEdge()
         setContent {
-            JetpackPracticeTheme {
-                Scaffold(modifier = Modifier.fillMaxSize()) { innerPadding ->
-                   // ListAndItems(modifier = Modifier.padding(innerPadding))
-                   // SimpleTextInput(modifier = Modifier.padding(innerPadding))
-                   // ButtonWithInput(modifier = Modifier.padding(innerPadding))
-                   // MultiChoiceInput()
-                   // SidebarExample()
-                  //  UserInput(modifier = Modifier.padding(innerPadding))
-                   // MoviesAndTVShowsScreen()
-                    //Login_Ui1()
-               //  Recycle(users = dummyData()) // pass here data class method
-                    MyApp()
-
+            JetpackPracticeTheme  {
+                Surface(
+                    modifier = Modifier.fillMaxSize(),
+                    color = MaterialTheme.colorScheme.background
+                ) {
+                    LazyColumnss()
                 }
             }
         }
@@ -52,17 +37,158 @@ class MainActivity : ComponentActivity() {
 }
 
 @Composable
-fun Greeting(name: String, modifier: Modifier = Modifier) {
-    Text(
-        text = "Hello $name!",
-        modifier = modifier
-    )
-}
+fun ShareCard() {
+    val context = LocalContext.current
+    val cardTitle = "Jetpack Compose"
+    val cardDescription = "This is a sample description to share on WhatsApp."
 
-@Preview(showBackground = true)
-@Composable
-fun GreetingPreview() {
-    JetpackPracticeTheme {
-        Greeting("Android")
+    Card(
+        modifier = Modifier
+            .padding(16.dp)
+            .fillMaxWidth(),
+        elevation = CardDefaults.cardElevation(8.dp)
+    ) {
+        Column(modifier = Modifier.padding(16.dp)) {
+            Text(text = cardTitle, style = MaterialTheme.typography.titleLarge)
+            Spacer(modifier = Modifier.height(8.dp))
+            Text(text = cardDescription, style = MaterialTheme.typography.bodyMedium)
+            Spacer(modifier = Modifier.height(12.dp))
+
+            val messageToShare = "$cardTitle\n\n$cardDescription"
+
+            Button(
+                onClick = {
+                    if (isWhatsAppInstalled(context)) {
+                        shareToWhatsApp(context, messageToShare)
+                    } else {
+                        Toast.makeText(context, "WhatsApp is not installed.", Toast.LENGTH_SHORT).show()
+                    }
+                }
+            ) {
+                Text("Share on WhatsApp")
+            }
+        }
     }
 }
+
+fun shareToWhatsApp(context: Context, message: String) {
+    val intent = Intent().apply {
+        action = Intent.ACTION_SEND
+        putExtra(Intent.EXTRA_TEXT, message)
+        type = "text/plain"
+        `package` = "com.whatsapp"
+    }
+
+    try {
+        context.startActivity(intent)
+    } catch (e: ActivityNotFoundException) {
+        Toast.makeText(context, "WhatsApp not installed", Toast.LENGTH_SHORT).show()
+    }
+}
+
+fun isWhatsAppInstalled(context: Context): Boolean {
+    return try {
+        context.packageManager.getPackageInfo("com.whatsapp", 0)
+        true
+    } catch (e: PackageManager.NameNotFoundException) {
+        false
+    }
+}
+
+
+
+/*
+package com.example.whatsappshare
+
+import android.content.ActivityNotFoundException
+import android.content.Context
+import android.content.Intent
+import android.content.pm.PackageManager
+import android.os.Bundle
+import android.widget.Toast
+import androidx.activity.ComponentActivity
+import androidx.activity.compose.setContent
+import androidx.compose.foundation.layout.*
+import androidx.compose.material3.*
+import androidx.compose.runtime.Composable
+import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.unit.dp
+import com.example.whatsappshare.ui.theme.WhatsAppShareTheme
+
+class MainActivity : ComponentActivity() {
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        setContent {
+            WhatsAppShareTheme {
+                Surface(
+                    modifier = Modifier.fillMaxSize(),
+                    color = MaterialTheme.colorScheme.background
+                ) {
+                    ShareCard()
+                }
+            }
+        }
+    }
+}
+
+@Composable
+fun ShareCard() {
+    val context = LocalContext.current
+    val cardTitle = "Jetpack Compose"
+    val cardDescription = "This is a sample description to share on WhatsApp."
+
+    Card(
+        modifier = Modifier
+            .padding(16.dp)
+            .fillMaxWidth(),
+        elevation = CardDefaults.cardElevation(8.dp)
+    ) {
+        Column(modifier = Modifier.padding(16.dp)) {
+            Text(text = cardTitle, style = MaterialTheme.typography.titleLarge)
+            Spacer(modifier = Modifier.height(8.dp))
+            Text(text = cardDescription, style = MaterialTheme.typography.bodyMedium)
+            Spacer(modifier = Modifier.height(12.dp))
+
+            val messageToShare = "$cardTitle\n\n$cardDescription"
+
+            Button(
+                onClick = {
+                    if (isWhatsAppInstalled(context)) {
+                        shareToWhatsApp(context, messageToShare)
+                    } else {
+                        Toast.makeText(context, "WhatsApp is not installed.", Toast.LENGTH_SHORT).show()
+                    }
+                }
+            ) {
+                Text("Share on WhatsApp")
+            }
+        }
+    }
+}
+
+fun shareToWhatsApp(context: Context, message: String) {
+    val intent = Intent().apply {
+        action = Intent.ACTION_SEND
+        putExtra(Intent.EXTRA_TEXT, message)
+        type = "text/plain"
+        `package` = "com.whatsapp"
+    }
+
+    try {
+        context.startActivity(intent)
+    } catch (e: ActivityNotFoundException) {
+        Toast.makeText(context, "WhatsApp not installed", Toast.LENGTH_SHORT).show()
+    }
+}
+
+fun isWhatsAppInstalled(context: Context): Boolean {
+    return try {
+        context.packageManager.getPackageInfo("com.whatsapp", 0)
+        true
+    } catch (e: PackageManager.NameNotFoundException) {
+        false
+    }
+}
+
+ */
