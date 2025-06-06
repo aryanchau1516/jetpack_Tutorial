@@ -17,6 +17,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.unit.dp
+import com.example.jetpackpractice.practice2.coreCmpnt.OnboardingScreen
 import com.example.jetpackpractice.screens.LazyColumnss
 
 
@@ -25,12 +26,7 @@ class MainActivity : ComponentActivity() {
         super.onCreate(savedInstanceState)
         setContent {
             JetpackPracticeTheme  {
-                Surface(
-                    modifier = Modifier.fillMaxSize(),
-                    color = MaterialTheme.colorScheme.background
-                ) {
-                    LazyColumnss()
-                }
+                OnboardingScreen()
             }
         }
     }
