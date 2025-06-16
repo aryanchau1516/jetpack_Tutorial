@@ -19,7 +19,7 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.ui.tooling.preview.Preview
 import com.example.jetpackpractice.R
 
-//@Preview(showBackground = true)
+@Preview(showBackground = true)
 @Composable
 fun OnboardingScreen() {
     Surface(
@@ -96,7 +96,7 @@ fun OnboardingScreen() {
                     colors = ButtonDefaults.buttonColors(containerColor = Color(0xFFFF6D00)),
                     modifier = Modifier.weight(1f)
                 ) {
-                    Text("Get Started")
+                    Text("Get Started", color = Color.White     )
                 }
             }
 

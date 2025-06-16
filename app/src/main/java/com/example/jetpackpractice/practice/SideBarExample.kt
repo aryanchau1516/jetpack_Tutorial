@@ -1,4 +1,5 @@
 package com.example.jetpackpractice.practice
+
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
@@ -32,9 +33,21 @@ fun SidebarExample() {
         drawerContent = {
             // Sidebar content
             Column {
-                Text("Item 1", style = MaterialTheme.typography.bodyLarge, modifier = Modifier.padding(16.dp))
-                Text("Item 2", style = MaterialTheme.typography.bodyLarge, modifier = Modifier.padding(16.dp))
-                Text("Item 3", style = MaterialTheme.typography.bodyLarge, modifier = Modifier.padding(16.dp))
+                Text(
+                    "Item 1",
+                    style = MaterialTheme.typography.bodyLarge,
+                    modifier = Modifier.padding(16.dp)
+                )
+                Text(
+                    "Item 2",
+                    style = MaterialTheme.typography.bodyLarge,
+                    modifier = Modifier.padding(16.dp)
+                )
+                Text(
+                    "Item 3",
+                    style = MaterialTheme.typography.bodyLarge,
+                    modifier = Modifier.padding(16.dp)
+                )
             }
         },
         content = {
@@ -49,14 +62,22 @@ fun SidebarExample() {
                                     drawerState.open() // Launch coroutine to open the drawer
                                 }
                             }) {
-                                Icon(imageVector = Icons.Default.Menu, contentDescription = "Open Drawer")
+                                Icon(
+                                    imageVector = Icons.Default.Menu,
+                                    contentDescription = "Open Drawer"
+                                )
                             }
                         }
                     )
                 },
                 content = { paddingValues ->
                     // Main content goes here
-                    Text("Main content goes here", modifier = Modifier.fillMaxSize().padding(paddingValues))
+                    Text(
+                        "Main content goes here",
+                        modifier = Modifier
+                            .fillMaxSize()
+                            .padding(paddingValues)
+                    )
                 }
             )
         }
