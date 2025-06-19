@@ -16,6 +16,7 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.ui.graphics.SolidColor
 import androidx.compose.ui.tooling.preview.Preview
 import com.example.jetpackpractice.R
 
@@ -83,7 +84,13 @@ fun OnboardingScreen() {
                 OutlinedButton(
                     onClick = { /* Skip Logic */ },
                     shape = RoundedCornerShape(50),
-                    modifier = Modifier.weight(1f)
+                    modifier = Modifier.weight(1f),
+                    colors = ButtonDefaults.outlinedButtonColors(
+                        contentColor = Color.Blue  // Text and icon color
+                    ),
+                    border = ButtonDefaults.outlinedButtonBorder.copy(
+                        brush = SolidColor(Color.Blue)
+                    )
                 ) {
                     Text("Skip")
                 }
